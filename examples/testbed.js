@@ -96,15 +96,18 @@
       faceDetectionTracking(options, function() {
         analyze(options);
       });
-    } else if (faceDetection === 'jquery') {
-      faceDetectionJquery(options, function() {
-        analyze(options);
-      });
-    } else if (faceDetection === 'opencv') {
-      faceDetectionOpenCV(options, function() {
-        analyze(options);
-      });
-    } else {
+    }
+    //  else if (faceDetection === 'jquery') {
+    //   faceDetectionJquery(options, function() {
+    //     analyze(options);
+    //   });
+    // }
+    //  else if (faceDetection === 'opencv') {
+    //   faceDetectionOpenCV(options, function() {
+    //     analyze(options);
+    //   });
+    // }
+    else {
       analyze(options);
     }
   }
@@ -127,40 +130,40 @@
     result.src = canvas.toDataURL();
   }
 
-  function faceDetectionOpenCV(options, callback) {
-    prescaleImage(img, 768, function(img, scale) {
-      var src = cv.imread(img);
-      var gray = new cv.Mat();
-      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
-      var faces = new cv.RectVector();
-      var faceCascade = new cv.CascadeClassifier();
-      // load pre-trained classifiers
-      faceCascade.load('haarcascade_frontalface_default.xml');
-      console.log(faceCascade);
-      // detect faces
-      var msize = new cv.Size(0, 0);
-      // let c = document.createElement('canvas');
-      // cv.imshow(c, gray);
-      // document.body.appendChild(c)
-      faceCascade.detectMultiScale(gray, faces, 1.1, 3, 0, msize, msize);
-      options.boost = [];
-      for (var i = 0; i < faces.size(); ++i) {
-        var face = faces.get(i);
-        options.boost.push({
-          x: face.x / scale,
-          y: face.y / scale,
-          width: face.width / scale,
-          height: face.height / scale,
-          weight: 1.0,
-        });
-      }
-      src.delete();
-      gray.delete();
-      faceCascade.delete();
-      faces.delete();
-      callback();
-    });
-  }
+  // function faceDetectionOpenCV(options, callback) {
+  //   prescaleImage(img, 768, function(img, scale) {
+  //     var src = cv.imread(img);
+  //     var gray = new cv.Mat();
+  //     cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
+  //     var faces = new cv.RectVector();
+  //     var faceCascade = new cv.CascadeClassifier();
+  //     // load pre-trained classifiers
+  //     faceCascade.load('haarcascade_frontalface_default.xml');
+  //     console.log(faceCascade);
+  //     // detect faces
+  //     var msize = new cv.Size(0, 0);
+  //     // let c = document.createElement('canvas');
+  //     // cv.imshow(c, gray);
+  //     // document.body.appendChild(c)
+  //     faceCascade.detectMultiScale(gray, faces, 1.1, 3, 0, msize, msize);
+  //     options.boost = [];
+  //     for (var i = 0; i < faces.size(); ++i) {
+  //       var face = faces.get(i);
+  //       options.boost.push({
+  //         x: face.x / scale,
+  //         y: face.y / scale,
+  //         width: face.width / scale,
+  //         height: face.height / scale,
+  //         weight: 1.0,
+  //       });
+  //     }
+  //     src.delete();
+  //     gray.delete();
+  //     faceCascade.delete();
+  //     faces.delete();
+  //     callback();
+  //   });
+  // }
 
   function faceDetectionTracking(options, callback) {
     prescaleImage(img, 768, function(img, scale) {
@@ -186,35 +189,35 @@
     });
   }
 
-  function faceDetectionJquery(options, callback) {
-    $(img).faceDetection({
-      complete: function(faces) {
-        if (faces === false) {
-          return console.log('jquery.facedetection returned false');
-        }
-        console.log(
-          'jquery.facedetection detected ' + faces.length + ' faces',
-          faces
-        );
-        options.boost = Array.prototype.slice
-          .call(faces, 0)
-          .map(function(face) {
-            return {
-              x: face.x,
-              y: face.y,
-              width: face.width,
-              height: face.height,
-              weight: 1.0,
-            };
-          });
+  // function faceDetectionJquery(options, callback) {
+  //   $(img).faceDetection({
+  //     complete: function(faces) {
+  //       if (faces === false) {
+  //         return console.log('jquery.facedetection returned false');
+  //       }
+  //       console.log(
+  //         'jquery.facedetection detected ' + faces.length + ' faces',
+  //         faces
+  //       );
+  //       options.boost = Array.prototype.slice
+  //         .call(faces, 0)
+  //         .map(function(face) {
+  //           return {
+  //             x: face.x,
+  //             y: face.y,
+  //             width: face.width,
+  //             height: face.height,
+  //             weight: 1.0,
+  //           };
+  //         });
 
-        callback();
-      },
-    });
-  }
+  //       callback();
+  //     },
+  //   });
+  // }
 
   function analyze(options) {
-    console.log(options);
+    console.log('options', options);
     smartcrop.crop(img, options, draw);
   }
   var processed = {};
@@ -236,11 +239,6 @@
             console.log('t', t);
             smartcrop.crop(img, options, function(result) {
               console.log('inside function');
-              // totalTime += (performance.now() - t) / 1e3;
-              // totalmpix += (img.naturalWidth * img.naturalHeight) / 1e6;
-              // totalCrops++;
-
-              // console.log(img.src, result);
               var crop = result.topCrop;
               // console.log('crop', crop);
               var canvas = $('<canvas className=' + 'AfterCrop' + '>')[0];
@@ -258,9 +256,9 @@
                 canvas.width,
                 canvas.height
               );
-              console.log('result', result.debugOutput);
-
-              $('.croppedImg').append(debugDraw(result, true));
+              console.log('result', result);
+              ('<h4>Cropped Image</h4>');
+              $('.croppedImg').append(canvas);
               //  .parent()
               //  .append($('<pre>').text(JSON.stringify(crop.score)));
             });
@@ -304,13 +302,13 @@
       );
 
     drawCrop(selectedCrop);
-    $('#debug')
-      .empty()
-      .append(debugDraw(result, true));
+    // $('#debug')
+    //   .empty()
+    //   .append(debugDraw(result, true));
 
-    $('.croppedImg')
-      .empty()
-      .append(debugDraw(result, true));
+    // $('.croppedImg')
+    //   .empty()
+    //   .append(debugDraw(result, true));
   }
 
   function drawCrop(crop) {
@@ -322,18 +320,18 @@
     ctx.strokeRect(crop.x, crop.y, crop.width, crop.height);
   }
 
-  window.openCvReady = function() {
-    console.log('opencv code ready');
-    loadCascade(
-      'haarcascade_frontalface_default.xml',
-      'https://unpkg.com/opencv.js@1.2.1/tests/haarcascade_frontalface_default.xml',
-      function() {
-        console.log('opencv ready');
-        document.querySelector('.opencv-loading input').disabled = false;
-        document.querySelector('.opencv-loading').className = '';
-      }
-    );
-  };
+  // window.openCvReady = function() {
+  //   console.log('opencv code ready');
+  //   loadCascade(
+  //     'haarcascade_frontalface_default.xml',
+  //     'https://unpkg.com/opencv.js@1.2.1/tests/haarcascade_frontalface_default.xml',
+  //     function() {
+  //       console.log('opencv ready');
+  //       document.querySelector('.opencv-loading input').disabled = false;
+  //       document.querySelector('.opencv-loading').className = '';
+  //     }
+  //   );
+  // };
 
   function loadCascade(path, url, callback) {
     var request = new XMLHttpRequest();
