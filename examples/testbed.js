@@ -217,9 +217,11 @@
     console.log(options);
     smartcrop.crop(img, options, draw);
   }
+  var processed = {};
 
   function draw(result) {
     var selectedCrop = result.topCrop;
+    var options = { debug: true, width: 180, height: 200 };
     console.log('selectedcrop:', selectedCrop);
 
     $('img').each(function() {
@@ -231,14 +233,16 @@
             if (processed[img.src]) return;
             processed[img.src] = true;
             var t = performance.now();
+            console.log('t', t);
             smartcrop.crop(img, options, function(result) {
-              totalTime += (performance.now() - t) / 1e3;
-              totalmpix += (img.naturalWidth * img.naturalHeight) / 1e6;
-              totalCrops++;
+              console.log('inside function');
+              // totalTime += (performance.now() - t) / 1e3;
+              // totalmpix += (img.naturalWidth * img.naturalHeight) / 1e6;
+              // totalCrops++;
 
               // console.log(img.src, result);
               var crop = result.topCrop;
-              console.log('Crop img', crop);
+              console.log('crop', crop);
               var canvas = $('<canvas className=' + 'AfterCrop' + '>')[0];
               var ctx = canvas.getContext('2d');
               canvas.width = options.width;
@@ -254,6 +258,7 @@
                 canvas.width,
                 canvas.height
               );
+              console.log('Result:', result);
 
               $('.croppedImg').append(debugDraw(result, true));
               //  .parent()
