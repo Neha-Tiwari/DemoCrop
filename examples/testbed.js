@@ -1,21 +1,21 @@
 (function() {
-  var canvas = $("canvas")[0];
+  var canvas = $('canvas')[0];
   var form = document.forms[0];
-  var ctx = canvas.getContext("2d");
+  var ctx = canvas.getContext('2d');
   var img;
 
-  $("html")
-    .on("dragover", function(e) {
+  $('html')
+    .on('dragover', function(e) {
       e.preventDefault();
       return false;
     })
-    .on("drop", function(e) {
+    .on('drop', function(e) {
       var files = e.originalEvent.dataTransfer.files;
       handleFiles(files);
       return false;
     });
 
-  $("input[type=file]").change(function() {
+  $('input[type=file]').change(function() {
     handleFiles(this.files);
   });
 
@@ -23,8 +23,8 @@
     if (files.length > 0) {
       var file = files[0];
       if (
-        typeof FileReader !== "undefined" &&
-        file.type.indexOf("image") != -1
+        typeof FileReader !== 'undefined' &&
+        file.type.indexOf('image') != -1
       ) {
         // var reader = new FileReader();
         // // Note: addEventListener doesn't work in Google Chrome for this event
@@ -47,7 +47,7 @@
 
         reader.onload = function(evt) {
           load(evt.target.result);
-          $("#blah").attr("src", evt.target.result);
+          $('#blah').attr('src', evt.target.result);
         };
       }
     }
@@ -55,18 +55,18 @@
 
   // load("images/flickr/kitty.jpg");
 
-  $("input[type=range]").on(
-    "input",
+  $('input[type=range]').on(
+    'input',
     _.debounce(function() {
       $(this)
-        .next(".value")
+        .next('.value')
         .text($(this).val());
       run();
     }, 500)
   );
 
-  $("input[type=radio], input[type=checkbox]").on(
-    "change",
+  $('input[type=radio], input[type=checkbox]').on(
+    'change',
     _.debounce(function() {
       run();
     })
@@ -87,20 +87,20 @@
       height: form.height.value * 1,
       minScale: form.minScale.value * 1,
       ruleOfThirds: form.ruleOfThirds.checked,
-      debug: true
+      debug: true,
     };
 
-    var faceDetection = $("input[name=faceDetection]:checked", form).val();
+    var faceDetection = $('input[name=faceDetection]:checked', form).val();
 
-    if (faceDetection === "tracking") {
+    if (faceDetection === 'tracking') {
       faceDetectionTracking(options, function() {
         analyze(options);
       });
-    } else if (faceDetection === "jquery") {
+    } else if (faceDetection === 'jquery') {
       faceDetectionJquery(options, function() {
         analyze(options);
       });
-    } else if (faceDetection === "opencv") {
+    } else if (faceDetection === 'opencv') {
       faceDetectionOpenCV(options, function() {
         analyze(options);
       });
@@ -116,11 +116,11 @@
     if (width < maxDimension && height < maxDimension)
       return callback(image, 1);
     var scale = Math.min(maxDimension / width, maxDimension / height);
-    var canvas = document.createElement("canvas");
+    var canvas = document.createElement('canvas');
     canvas.width = ~~(width * scale);
     canvas.height = ~~(height * scale);
-    canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
-    var result = document.createElement("img");
+    canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+    var result = document.createElement('img');
     result.onload = function() {
       callback(result, scale);
     };
@@ -135,7 +135,7 @@
       var faces = new cv.RectVector();
       var faceCascade = new cv.CascadeClassifier();
       // load pre-trained classifiers
-      faceCascade.load("haarcascade_frontalface_default.xml");
+      faceCascade.load('haarcascade_frontalface_default.xml');
       console.log(faceCascade);
       // detect faces
       var msize = new cv.Size(0, 0);
@@ -151,7 +151,7 @@
           y: face.y / scale,
           width: face.width / scale,
           height: face.height / scale,
-          weight: 1.0
+          weight: 1.0,
         });
       }
       src.delete();
@@ -164,11 +164,11 @@
 
   function faceDetectionTracking(options, callback) {
     prescaleImage(img, 768, function(img, scale) {
-      var tracker = new tracking.ObjectTracker("face");
+      var tracker = new tracking.ObjectTracker('face');
       tracking.track(img, tracker);
-      tracker.on("track", function(event) {
+      tracker.on('track', function(event) {
         console.log(
-          "tracking.js detected " + event.data.length + " faces",
+          'tracking.js detected ' + event.data.length + ' faces',
           event.data
         );
         options.boost = event.data.map(function(face) {
@@ -177,7 +177,7 @@
             y: face.y / scale,
             width: face.width / scale,
             height: face.height / scale,
-            weight: 1.0
+            weight: 1.0,
           };
         });
 
@@ -190,10 +190,10 @@
     $(img).faceDetection({
       complete: function(faces) {
         if (faces === false) {
-          return console.log("jquery.facedetection returned false");
+          return console.log('jquery.facedetection returned false');
         }
         console.log(
-          "jquery.facedetection detected " + faces.length + " faces",
+          'jquery.facedetection detected ' + faces.length + ' faces',
           faces
         );
         options.boost = Array.prototype.slice
@@ -204,12 +204,12 @@
               y: face.y,
               width: face.width,
               height: face.height,
-              weight: 1.0
+              weight: 1.0,
             };
           });
 
         callback();
-      }
+      },
     });
   }
 
@@ -220,12 +220,14 @@
 
   function draw(result) {
     var selectedCrop = result.topCrop;
+    console.log('selectedcrop:', selectedCrop);
 
-    $("img").each(function() {
+    $('img').each(function() {
       $(this).load(function() {
         window.setTimeout(
           function() {
             var img = this;
+            console.log('img:', img);
             if (processed[img.src]) return;
             processed[img.src] = true;
             var t = performance.now();
@@ -236,8 +238,9 @@
 
               // console.log(img.src, result);
               var crop = result.topCrop;
-              var canvas = $("<canvas className=" + "AfterCrop" + ">")[0];
-              var ctx = canvas.getContext("2d");
+              console.log('Crop img', crop);
+              var canvas = $('<canvas className=' + 'AfterCrop' + '>')[0];
+              var ctx = canvas.getContext('2d');
               canvas.width = options.width;
               canvas.height = options.height;
               ctx.drawImage(
@@ -252,7 +255,7 @@
                 canvas.height
               );
 
-              $(".croppedImg").append(debugDraw(result, true));
+              $('.croppedImg').append(debugDraw(result, true));
               //  .parent()
               //  .append($('<pre>').text(JSON.stringify(crop.score)));
             });
@@ -264,19 +267,19 @@
         $(this).load();
       }
     });
-    $(".crops")
+    $('.crops')
       .empty()
       .append(
         _.sortBy(result.crops, function(c) {
           return -c.score.total;
         }).map(function(crop) {
-          return $("<p>")
+          return $('<p>')
             .text(
-              "Score: " +
+              'Score: ' +
                 ~~(crop.score.total * 10000000) +
-                ", " +
+                ', ' +
                 crop.x +
-                "x" +
+                'x' +
                 crop.y
             )
             .hover(
@@ -290,18 +293,17 @@
             .click(function() {
               selectedCrop = crop;
               drawCrop(selectedCrop);
-              // $(".croppedImg").append(debugDraw(result, true));
             })
-            .data("crop", crop);
+            .data('crop', crop);
         })
       );
 
     drawCrop(selectedCrop);
-    $("#debug")
+    $('#debug')
       .empty()
       .append(debugDraw(result, true));
 
-    $(".croppedImg")
+    $('.croppedImg')
       .empty()
       .append(debugDraw(result, true));
   }
@@ -310,37 +312,37 @@
     canvas.width = img.width;
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
-    ctx.strokeStyle = "red";
+    ctx.strokeStyle = 'red';
     ctx.lineWidth = 4;
     ctx.strokeRect(crop.x, crop.y, crop.width, crop.height);
   }
 
   window.openCvReady = function() {
-    console.log("opencv code ready");
+    console.log('opencv code ready');
     loadCascade(
-      "haarcascade_frontalface_default.xml",
-      "https://unpkg.com/opencv.js@1.2.1/tests/haarcascade_frontalface_default.xml",
+      'haarcascade_frontalface_default.xml',
+      'https://unpkg.com/opencv.js@1.2.1/tests/haarcascade_frontalface_default.xml',
       function() {
-        console.log("opencv ready");
-        document.querySelector(".opencv-loading input").disabled = false;
-        document.querySelector(".opencv-loading").className = "";
+        console.log('opencv ready');
+        document.querySelector('.opencv-loading input').disabled = false;
+        document.querySelector('.opencv-loading').className = '';
       }
     );
   };
 
   function loadCascade(path, url, callback) {
     var request = new XMLHttpRequest();
-    request.open("GET", url, true);
-    request.responseType = "arraybuffer";
+    request.open('GET', url, true);
+    request.responseType = 'arraybuffer';
     request.onload = function() {
       if (request.readyState === 4) {
         if (request.status === 200) {
           var data = new Uint8Array(request.response);
-          cv.FS_createDataFile("/", path, data, true, false, false);
+          cv.FS_createDataFile('/', path, data, true, false, false);
           callback();
         } else {
           self.printError(
-            "Failed to load " + url + " status: " + request.status
+            'Failed to load ' + url + ' status: ' + request.status
           );
         }
       }
