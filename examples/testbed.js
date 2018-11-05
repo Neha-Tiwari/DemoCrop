@@ -229,7 +229,7 @@
         window.setTimeout(
           function() {
             var img = this;
-            console.log('img:', img);
+            // console.log('img:', img);
             if (processed[img.src]) return;
             processed[img.src] = true;
             var t = performance.now();
@@ -242,7 +242,7 @@
 
               // console.log(img.src, result);
               var crop = result.topCrop;
-              console.log('crop', crop);
+              // console.log('crop', crop);
               var canvas = $('<canvas className=' + 'AfterCrop' + '>')[0];
               var ctx = canvas.getContext('2d');
               canvas.width = options.width;
@@ -258,7 +258,7 @@
                 canvas.width,
                 canvas.height
               );
-              console.log('Result:', result);
+              console.log('result', result.debugOutput);
 
               $('.croppedImg').append(debugDraw(result, true));
               //  .parent()
