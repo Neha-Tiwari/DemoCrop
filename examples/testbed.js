@@ -6,6 +6,9 @@
 
   $('html')
     .on('dragover', function(e) {
+      // console.log('inside drag');
+      // loadRatio();
+      // console.log('loadRatio:', loadRatio());
       e.preventDefault();
       return false;
     })
@@ -219,6 +222,7 @@
   function analyze(options) {
     console.log('options', options);
     smartcrop.crop(img, options, draw);
+    // console.log(draw);
   }
   var processed = {};
 
@@ -286,8 +290,10 @@
                 crop.y
             )
             .hover(
+              // .onclick(
               function() {
                 drawCrop(crop);
+                console.log('crop', crop);
               },
               function() {
                 drawCrop(selectedCrop);
@@ -302,9 +308,9 @@
       );
 
     drawCrop(selectedCrop);
-    // $('#debug')
-    //   .empty()
-    //   .append(debugDraw(result, true));
+    $('#debug')
+      .empty()
+      .append(debugDraw(result, true));
 
     // $('.croppedImg')
     //   .empty()
@@ -332,6 +338,13 @@
   //     }
   //   );
   // };
+
+  function loadRatio(ratioH, ratioW) {
+    var ratioW = $('.croppedImg')[0].width / $('.croppedImg').width();
+    var ratioH = $('.croppedImg')[0].height / $('.croppedImg').height();
+    var ratio = Math.min(ratioH, ratioW);
+    console.log('ratio:', ratio);
+  }
 
   function loadCascade(path, url, callback) {
     var request = new XMLHttpRequest();

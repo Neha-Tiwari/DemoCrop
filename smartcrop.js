@@ -33,8 +33,8 @@
     typeof Promise !== 'undefined'
       ? Promise
       : function() {
-        throw new Error('No native promises and smartcrop.Promise not set.');
-      };
+          throw new Error('No native promises and smartcrop.Promise not set.');
+        };
 
   smartcrop.DEFAULTS = {
     width: 0,
@@ -69,7 +69,7 @@
     imageOperations: null,
     canvasFactory: defaultCanvasFactory,
     // Factory: defaultFactories,
-    debug: false
+    debug: false,
   };
 
   smartcrop.crop = function(inputImage, options_, callback) {
@@ -127,7 +127,7 @@
                     y: ~~(boost.y * prescale),
                     width: ~~(boost.width * prescale),
                     height: ~~(boost.height * prescale),
-                    weight: boost.weight
+                    weight: boost.weight,
                   };
                 });
               }
@@ -296,7 +296,7 @@
             x: x,
             y: y,
             width: cropWidth * scale,
-            height: cropHeight * scale
+            height: cropHeight * scale,
           });
         }
       }
@@ -310,7 +310,7 @@
       saturation: 0,
       skin: 0,
       boost: 0,
-      total: 0
+      total: 0,
     };
 
     var od = output.data;
@@ -327,11 +327,11 @@
         var i = importance(options, crop, x, y);
         var detail = od[p + 1] / 255;
 
-        result.skin += od[p] / 255 * (detail + options.skinBias) * i;
+        result.skin += (od[p] / 255) * (detail + options.skinBias) * i;
         result.detail += detail * i;
         result.saturation +=
-          od[p + 2] / 255 * (detail + options.saturationBias) * i;
-        result.boost += od[p + 3] / 255 * i;
+          (od[p + 2] / 255) * (detail + options.saturationBias) * i;
+        result.boost += (od[p + 3] / 255) * i;
       }
     }
 
@@ -528,7 +528,7 @@
           var id = ctx.getImageData(0, 0, c.width, c.height);
           return new ImgData(c.width, c.height, id.data);
         });
-      }
+      },
     };
   }
   smartcrop._canvasImageOperations = canvasImageOperations;

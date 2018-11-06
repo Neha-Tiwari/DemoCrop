@@ -26,10 +26,10 @@ h1 {
 p {
   max-width: 900px;
 }
-input[type="file"] {
+input[type='file'] {
   display: block;
 }
-input[type="range"] {
+input[type='range'] {
   width: 300px;
 }
 
@@ -58,7 +58,7 @@ canvas {
 }
 
 .sidebar {
-  width: 50%;
+  width: 40%;
   float: left;
   height: 600px;
 }
@@ -110,7 +110,7 @@ canvas {
 }
 
 .opencv-loading:after {
-  content: "";
+  content: '';
   box-sizing: border-box;
   display: inline-block;
   width: 1ex;

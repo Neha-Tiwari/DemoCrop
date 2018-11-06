@@ -30,7 +30,12 @@
       <div><label><input name=faceDetection type=radio value=off checked />Off</label></div>
       <div><label><input name=faceDetection type=radio value=jquery />Use <a href="http://facedetection.jaysalvat.com/">jquery.facedetection</a></label></div>
       <div><label><input name=faceDetection type=radio value=tracking />Use <a href="https://trackingjs.com/">tracking.js</a></label></div>
-      <div><label class=opencv-loading><input name=faceDetection type=radio value=opencv disabled />Use <a href="https://opencv.org/">opencv.js</a></label></div>
+      <div>
+        <!-- <label class=opencv-loading> -->
+        <input name=faceDetection type=radio value=opencv disabled />
+        Use <a href="https://opencv.org/">opencv.js</a>
+        <!-- </label> -->
+      </div>
     </form>
   </div>
   <div class=output>
@@ -51,7 +56,7 @@
   <script src=smartcrop-debug.js></script>
   <script src=tracking-min.js></script>
   <script src=tracking-face-min.js></script>
-  <script src=jquery.facedetection.min.js></script>
+  <!-- <script src=jquery.facedetection.min.js></script> -->
   <script src=testbed.js></script>
   <script async src="https://unpkg.com/opencv.js@1.2.1/opencv.js" integrity="sha384-ucXOxPgA5tSKdaZgFD+5C0lAJeavjW31veENhNvOwsTjgx8waDD0s1QcMdUxhlxk"
     crossorigin="anonymous" onload="openCvReady()"></script>
