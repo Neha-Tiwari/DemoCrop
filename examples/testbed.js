@@ -229,7 +229,7 @@
   function draw(result) {
     var selectedCrop = result.topCrop;
     var options = { debug: true, width: 180, height: 200 };
-    console.log('selectedcrop:', selectedCrop);
+    // console.log('selectedcrop:', selectedCrop);
 
     $('img').each(function() {
       $(this).load(function() {
@@ -240,15 +240,18 @@
             if (processed[img.src]) return;
             processed[img.src] = true;
             var t = performance.now();
-            console.log('t', t);
+            // console.log('t', t);
             smartcrop.crop(img, options, function(result) {
-              console.log('inside function');
+              // console.log('inside function');
               var crop = result.topCrop;
               // console.log('crop', crop);
               var canvas = $('<canvas className=' + 'AfterCrop' + '>')[0];
               var ctx = canvas.getContext('2d');
               canvas.width = options.width;
+              // canvas.width = img.width;
+
               canvas.height = options.height;
+              // canvas.height = img.height;
               ctx.drawImage(
                 img,
                 crop.x,
@@ -260,9 +263,11 @@
                 canvas.width,
                 canvas.height
               );
-              console.log('result', result);
+              // console.log('result', result);
               ('<h4>Cropped Image</h4>');
+
               $('.croppedImg').append(canvas);
+
               //  .parent()
               //  .append($('<pre>').text(JSON.stringify(crop.score)));
             });
@@ -293,7 +298,7 @@
               // .onclick(
               function() {
                 drawCrop(crop);
-                console.log('crop', crop);
+                // console.log('crop', crop);
               },
               function() {
                 drawCrop(selectedCrop);
@@ -307,7 +312,7 @@
         })
       );
 
-    drawCrop(selectedCrop);
+    // drawCrop(selectedCrop);
     $('#debug')
       .empty()
       .append(debugDraw(result, true));
@@ -321,9 +326,10 @@
     canvas.width = img.width;
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'green';
+    ctx.lineWidth = 2;
     ctx.strokeRect(crop.x, crop.y, crop.width, crop.height);
+    console.log('Coordinates for cropped image line:', crop);
   }
 
   // window.openCvReady = function() {
