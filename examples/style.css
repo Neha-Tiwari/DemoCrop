@@ -39,6 +39,14 @@ canvas {
   box-sizing: border-box;
   max-width: 100%;
   margin: auto;
+  border-radius: 60%;
+}
+
+img,
+croppedImg,
+.responsive {
+  width: 100%;
+  height: auto;
 }
 
 .output {
